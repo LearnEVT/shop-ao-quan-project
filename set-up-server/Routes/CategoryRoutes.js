@@ -8,8 +8,8 @@ const categoryRoute = express.Router();
 //CATEGORY GET ALL
 categoryRoute.get(
   "/all",
-  protect,
-  admin,
+  // protect,
+  // admin,
   asyncHandler(async (req, res) => {
     const categorys = await Category.find({}).sort({ _id: -1 });
     res.json({ categorys });

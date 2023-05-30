@@ -16,3 +16,18 @@ export const getNow = () => ({
   startDate : moment().startOf('month').format("YYYY-MM-DD") ,
   endDate : moment().endOf('month').format("YYYY-MM-DD") 
 })
+
+export function removeAccents(str) {
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D');
+}
+
+
+    export const StringToSlug = (str) => {
+      const result = removeAccents(str)
+      return result.replaceAll(" ",'-')
+    }
+    

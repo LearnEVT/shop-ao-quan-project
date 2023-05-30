@@ -20,6 +20,7 @@ import ButtonRemoveAllFilter from "./ButtonRemoveAllFilter";
 export default function Search({ typeCategory }) {
   const dispatch = useDispatch();
   const [fetch, setFetch] = useState(false);
+  const [reFetch,setReFetch] = useState(false);
   const keyword = useSelector((state) => state.filterProduct.keyword);
   const category = useSelector((state) => state.filterProduct.category);
   const sortPrice = useSelector((state) => state.filterProduct.sortPrice);
@@ -34,8 +35,13 @@ export default function Search({ typeCategory }) {
   const min = useSelector((state) => state.filterProduct.min);
   const page = parseInt(useSelector((state) => state.filterProduct.page));
   useEffect(() => {
-    typeCategory && dispatch(setCategorySearch(typeCategory));
-  }, [typeCategory]);
+    if(typeCategory){
+      dispatch(setCategorySearch(typeCategory));
+    }
+  }, [typeCategory,reFetch]);
+  useEffect(() => {
+  setReFetch(!reFetch)
+  },[typeCategory])
   // useEffect(() => {
   //   const arrMore = [more10, more50];
   //   arrMore.sort();
@@ -108,6 +114,7 @@ export default function Search({ typeCategory }) {
     page,
     gteRating,
     setSearchParams,
+    
   ]);
   useEffect(() => {
     fetchFillterCallBack();

@@ -6,7 +6,7 @@ import ProfileUser from "./page/client/screens/ProfileUser";
 import InfoUser from "./page/client/screens/InfoUser";
 import ListPaymentUser from "./page/client/screens/ListPaymentUser";
 import Payment from "./page/client/screens/Payment";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./responsive.css";
 import 'antd/dist/reset.css';
 import "react-toastify/dist/ReactToastify.css";
@@ -41,12 +41,23 @@ import ProductSellerScreen from "./page/admin/screens/ProductSellerScreen";
 import ContactUsUser from "./page/client/ContactUsUser";
 import EditCategory from "./components/admin/Categories/EditCategory";
 import ProductComments from "./page/admin/screens/ProductComments";
+import axiosClient from "./apis/axiosClient";
+import { get } from "lodash";
+import { StringToSlug } from "./constant/FunctionCommom";
 
 const ComponentHomePage = React.lazy(() =>
   import("./page/client/screens/ComponentHomePage")
 );
 
 function App() {
+  const [categories,setCategories] = useState([])
+  useEffect(() => {
+    const fetch = async() => {
+      const res = await axiosClient.get(`/api/categorys/all`)
+      setCategories(get(res,'data.categorys'))
+    }
+    fetch()
+  },[])
   return (
     <>
       <Routes>
@@ -84,7 +95,15 @@ function App() {
           <Route path="/trending-product" element={<CategoryTrending />} />
 
           <Route path="/product">
-            <Route
+          {categories?.map(e =>  {
+            return <Route
+              path={StringToSlug(get(e,'name'))}
+              element={
+                <Search  typeCategory={get(e,'name')} />
+              }
+            />
+          })}
+            {/* <Route
               path="shirt"
               element={
                 <Search  typeCategory="shirt" />
@@ -117,7 +136,7 @@ function App() {
               element={
                 <Search  typeCategory="shorts" />
               }
-            />
+            /> */}
           </Route>
           <Route path="/products" element={<Search />} />
           <Route path="/*" element={<NotFound />} />
